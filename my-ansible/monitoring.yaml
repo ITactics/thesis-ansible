@@ -31,7 +31,7 @@
     - name: Настройка базы данных MySQL для Zabbix
       mysql_user:
         name: root
-        login_password: 123456789
+        login_password: your_password
         login_unix_socket: /var/run/mysqld/mysqld.sock
  
     - name: Создание базы данных Zabbix
@@ -39,13 +39,13 @@
         name: zabbix
         state: present
         login_user: root
-        login_password: 123456789
+        login_password: your_password
 
     - name: Импорт схемы базы данных Zabbix
       community.mysql.mysql_db:
         name: zabbix
         login_user: root
-        login_password: 123456789
+        login_password: your_password
         target: /usr/share/doc/zabbix-server-mysql*/create.sql.gz
                        
     - name: Включить и запустить Zabbix сервер и агент
@@ -60,7 +60,7 @@
     - name: Проверка существования таблицы dbversion
       mysql_db:
         login_user: root
-        login_password: 123456789
+        login_password: your_password
         name: zabbix
         state: dump
         target: /tmp/dbversion_dump.sql
@@ -70,7 +70,7 @@
     - name: Создание таблицы dbversion, если она не существует
       mysql_db:
         login_user: root
-        login_password: 123456789
+        login_password: your_password
         name: zabbix
         state: import
         target: /tmp/dbversion_dump.sql
