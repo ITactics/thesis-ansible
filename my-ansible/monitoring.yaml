@@ -11,7 +11,7 @@
  
     - name: Добавить репозиторий Zabbix
       apt_repository:
-        repo: deb http://repo.zabbix.com/zabbix/5.2/ubuntu focal main
+        repo: deb http://repo.zabbix.com/zabbix/5.4/ubuntu focal main
         state: present
         filename: 'zabbix'
         update_cache: yes
@@ -46,7 +46,7 @@
         name: zabbix
         login_user: root
         login_password: your_password
-        target: /usr/share/doc/zabbix-server-mysql*/create.sql.gz
+        target: /usr/share/doc/zabbix-server-mysql*/server.sql.gz
                        
     - name: Включить и запустить Zabbix сервер и агент
       service:
