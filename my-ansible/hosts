@@ -1,3 +1,2 @@
 [web_servers]
-"{{ name_server }}" "{{ ansible_host }}"= "{{ ansible_user }}"= " {{ansible_port }}"= "{{ ansible_ssh_pass }}"=
-"{{ name_server }}" "{{ ansible_host }}"= "{{ ansible_user }}"= " {{ansible_port }}"= "{{ ansible_ssh_pass }}"=
+localhost
