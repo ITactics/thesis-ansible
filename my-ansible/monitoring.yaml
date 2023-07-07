@@ -33,7 +33,7 @@
     - name: Настройка базы данных MySQL для Zabbix
       mysql_user:
         name: root
-        login_password: "{{ your_db_pass }}"
+        login_password: "{{ your_curent_pass_db }}"
         login_unix_socket: /var/run/mysqld/mysqld.sock
  
     - name: Создание базы данных Zabbix
@@ -41,13 +41,13 @@
         name: zabbix
         state: present
         login_user: root
-        login_password: "{{ your_db_pass }}"
+        login_password: "{{ your_curent_pass_db }}"
 
     - name: Импорт схемы базы данных Zabbix
       community.mysql.mysql_db:
         name: zabbix
-        login_user: root
-        login_password: "{{ your_db_pass }}"
+        login_user: "{{ your_login_user }}"
+        login_password: "{{ your_curent_pass_db }}"
         target: /usr/share/doc/zabbix-server-mysql*/server.sql.gz
                        
     - name: Включить и запустить Zabbix и Агент
@@ -60,17 +60,17 @@
         - zabbix-agent
  
     - name: Проверка существования таблицы dbversion
-      shell: mysql -u --user="{{ you_login_user }}" --password="{{ your_db_pass }}" -e "USE zabbix; SELECT 1 FROM dbversion LIMIT 1;"
+      shell: mysql -u --user="{{ your_login_user }}" --password="{{ your_curent_pass_db }}" -e "USE zabbix; SELECT 1 FROM dbversion LIMIT 1;"
       register: dbversion_check
       ignore_errors: true
  
    
     - name: Создание таблицы dbversion, если она не существует
-      shell: mysql -u --user="{{ you_login_user }}" --password="{{ your_db_pass }}" -e "USE zabbix; CREATE TABLE dbversion (mandatory tinyint(1) unsigned NOT NULL DEFAULT '1', version varchar(255) NOT NULL DEFAULT '', date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, PRIMARY KEY (mandatory)) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
+      shell: mysql -u --user="{{ your_login_user }}" --password="{{ your_curent_pass_db }}" -e "USE zabbix; CREATE TABLE dbversion (mandatory tinyint(1) unsigned NOT NULL DEFAULT '1', version varchar(255) NOT NULL DEFAULT '', date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, PRIMARY KEY (mandatory)) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
       when: dbversion_check.rc != 0
 
     - name: Вставка значений в таблицу dbversion
-      shell: mysql -u --user="{{ you_login_user }}" --password="{{ your_db_pass }}" -e "USE zabbix; INSERT INTO dbversion (mandatory, version, date) VALUES (0, '5.2.7', NOW());"
+      shell: mysql -u --user="{{ your_login_user }}" --password="{{ your_curent_pass_db }}" -e "USE zabbix; INSERT INTO dbversion (mandatory, version, date) VALUES (0, '5.2.7', NOW());"
       when: dbversion_check.rc != 0
  
     - name: Настройка Zabbix-сервера
