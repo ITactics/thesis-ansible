@@ -62,7 +62,7 @@
         priv: 'mydb.*:ALL'
         state: present
         login_unix_socket: /var/run/mysqld/mysqld.sock
-        login_password: your_curent_password
+        login_password: "{{ your_current_pass_db }}"
       become: yes
  
     - name: Создание пользователей репликации
