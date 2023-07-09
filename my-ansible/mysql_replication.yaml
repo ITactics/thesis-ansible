@@ -33,7 +33,7 @@
         name: "{{ your_login_user }}"
         password: "{{ your_new_pass }}"
         login_unix_socket: /var/run/mysqld/mysqld.sock
-        login_password: "{{ your_curent_pass_db }}"
+        login_password: "{{ your_current_pass_db }}"
         check_implicit_admin: yes
       become: yes
  
@@ -42,7 +42,7 @@
         name: "{{ item }}"
         state: absent
         login_unix_socket: /var/run/mysqld/mysqld.sock
-        login_password: "{{ your_curent_pass_db }}"
+        login_password: "{{ your_current_pass_db }}"
       with_items:
         - test
       become: yes
@@ -52,7 +52,7 @@
         name: mydb
         state: present
         login_unix_socket: /var/run/mysqld/mysqld.sock
-        login_password: "{{ your_curent_pass_db }}"
+        login_password: "{{ your_current_pass_db }}"
       become: yes
  
     - name: Создание пользователя базы данных
@@ -72,7 +72,7 @@
         priv: '*.*:REPLICATION SLAVE'
         state: present
         login_unix_socket: /var/run/mysqld/mysqld.sock
-        login_password: "{{ your_curent_pass_db }}"
+        login_password: "{{ your_current_pass_db }}"
       become: yes
  
     - name: Настройка подчиненного устройства для репликации
@@ -84,11 +84,11 @@
         master_log_file: mysql-bin.000001
         master_log_pos: 344
         login_unix_socket: /var/run/mysqld/mysqld.sock
-        login_password: "{{ your_curent_pass_db }}"
+        login_password: "{{ your_current_pass_db }}"
       become: yes
  
     - name: Запуск репликации
       mysql_replication:
         mode: startreplica
-        login_password: "{{ your_curent_pass_db }}"
+        login_password: "{{ your_current_pass_db }}"
       become: yes
