@@ -16,7 +16,7 @@
   changed_when: false
 
 
-    - name: Перезапуск Nginx
-      service:
-        name: nginx
-        state: restarted
+- name: Перезапуск Nginx
+  service:
+    name: nginx
+    state: restarted
