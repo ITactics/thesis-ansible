@@ -7,9 +7,14 @@
       shell: locale-gen en_US
       changed_when: false
 
-    - name: Переконфигурация локалей
-      shell: dpkg-reconfigure locales
-      changed_when: false
+- name: Переконфигурация локалей
+  become: true
+  expect:
+    command: dpkg-reconfigure locales
+    responses:
+      - 'en_US.UTF-8 UTF-8'
+  changed_when: false
+
 
     - name: Перезапуск Nginx
       service:
