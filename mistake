@@ -1,0 +1,2 @@
+TASK [Переконфигурация локалей] **********************************************************************************
+fatal: [node1]: FAILED! => {"changed": false, "msg": "argument 'responses' is of type <class 'list'> and we were unable to convert to dict: <class 'list'> cannot be converted to a dict"}
