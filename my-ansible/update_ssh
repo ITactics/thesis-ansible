@@ -1,0 +1,17 @@
+- name: Update SSH configuration
+  hosts: node1, node2
+ 
+  tasks:
+    - name: Uncomment PermitRootLogin in sshd_config
+      become: true
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?(PermitRootLogin)'
+        line: 'PermitRootLogin yes'
+        backup: yes
+ 
+    - name: Restart SSH service
+      become: true
+      service:
+        name: sshd
+        state: restarted

@@ -1,0 +1,74 @@
+---
+- name: Установка и настройка веб-серверов
+  hosts: web_servers
+  become: true
+ 
+  tasks:
+    - name: Обновление списка пакетов
+      apt:
+        update_cache: yes
+ 
+    - name: Установка Apache
+      apt:
+        name: apache2
+        state: latest
+ 
+    - name: Настройка конфигурации Apache
+      template:
+        src: templates/apache.conf.j2
+        dest: /etc/apache2/apache2.conf
+      notify:
+        - Restart Apache
+
+    - name: Изменение порта Apache
+      lineinfile:
+        path: /etc/apache2/ports.conf
+        regexp: '^Listen '
+        line: 'Listen 8000'
+        state: present      
+ 
+    - name: Установка Nginx
+      apt:
+        name: nginx
+        state: latest
+ 
+    - name: Настройка конфигурации Nginx
+      template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/sites-enabled/default
+      notify:
+        - Restart Nginx
+ 
+    - name: Установка HAProxy
+      apt:
+        name: haproxy
+        state: latest
+ 
+    - name: Настройка конфигурации HAProxy
+      template:
+        src: templates/haproxy.cfg.j2
+        dest: /etc/haproxy/haproxy.cfg
+      notify:
+        - Restart HAProxy
+ 
+  handlers:
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
+ 
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+ 
+    - name: Restart HAProxy
+      service:
+        name: haproxy
+        state: restarted
+    - name: Добавление HAProxy в автозагрузку
+      systemd:
+        name: haproxy
+        enabled: yes
+
+   

@@ -1,0 +1,94 @@
+---
+- name: Развертывание базы данных MySQL с репликацией
+  hosts: node1,node2
+  remote_user: root
+  become: yes
+  tasks:
+    - name: Обновление списка пакетов
+      apt:
+        update_cache: yes
+      become: yes
+ 
+    - name: Установка пакета MySQL
+      apt:
+        name: mysql-server
+        state: present
+      become: yes
+ 
+    - name: Установка пакета pymysql
+      apt:
+        name: python3-pymysql
+        state: present
+      become: yes
+ 
+    - name: Запуск и настройка службы MySQL
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+      become: yes
+ 
+    - name: Обновление пароля root для MySQL
+      mysql_user:
+        name: root
+        password: 123456789
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        login_password: 123max
+        check_implicit_admin: yes
+      become: yes
+ 
+    - name: Удаление неиспользуемых пользователей и баз данных
+      mysql_user:
+        name: "{{ item }}"
+        state: absent
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        login_password: 123456789
+      with_items:
+        - test
+      become: yes
+ 
+    - name: Создание базы данных
+      mysql_db:
+        name: mydb
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        login_password: 123456789
+      become: yes
+ 
+    - name: Создание пользователя базы данных
+      mysql_user:
+        name: max
+        password: 123456
+        priv: 'mydb.*:ALL'
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        login_password: 123456789
+      become: yes
+ 
+    - name: Создание пользователей репликации
+      mysql_user:
+        name: replicator
+        password: 123456
+        priv: '*.*:REPLICATION SLAVE'
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        login_password: 123456789
+      become: yes
+ 
+    - name: Настройка подчиненного устройства для репликации
+      mysql_replication:
+        mode: changeprimary
+        master_host: 172.20.10.3
+        master_user: replicator
+        master_password: 123456
+        master_log_file: mysql-bin.000001
+        master_log_pos: 344
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        login_password: 123456789
+      become: yes
+ 
+    - name: Запуск репликации
+      mysql_replication:
+        mode: startreplica
+        login_password: 123456789
+      become: yes

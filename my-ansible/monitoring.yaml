@@ -1,0 +1,155 @@
+---
+- name: Деплой системы мониторинга Zabbix
+  hosts: node1,node2
+  become: true
+ 
+  tasks:
+    - name: Добавление ключа репозитория Zabbix
+      apt_key:
+        url: https://repo.zabbix.com/zabbix-official-repo.key
+        state: present
+ 
+    - name: Добавить репозиторий Zabbix
+      apt_repository:
+        repo: deb http://repo.zabbix.com/zabbix/6.4/ubuntu focal main
+        state: present
+        filename: 'zabbix'
+        update_cache: yes
+ 
+    - name: Обновить список пакетов
+      apt:
+        update_cache: yes
+ 
+    - name: Установка Zabbix сервер и Агент
+      apt:
+        name:
+          - zabbix-server-mysql
+          - zabbix-agent  
+          - zabbix-frontend-php
+          - zabbix-nginx-conf
+          - zabbix-sql-scripts
+          - zabbix-get
+        state: present
+ 
+    - name: Настройка базы данных MySQL для Zabbix
+      mysql_user:
+        name: root
+        login_password: 123456789
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+ 
+    - name: Создание базы данных Zabbix
+      mysql_db:
+        name: zabbix
+        state: present
+        login_user: root
+        login_password: 123456789
+
+    - name: Создание пользователя для базы данных Zabbix
+      mysql_user:
+        name: zabbix
+        password: '123456789'
+        priv: 'zabbix.*:ALL'
+        host: localhost
+        login_user: root
+        login_password: '123456789'
+        state: present
+
+    - name: Импорт схемы базы данных Zabbix
+      community.mysql.mysql_db:
+        name: zabbix
+        login_user: root
+        login_password: 123456789
+        target: /usr/share/zabbix-sql-scripts/mysql*/server.sql.gz
+
+    - name: Распаковка архива с дампом
+      become: true
+      shell: gunzip /usr/share/zabbix-sql-scripts/mysql/server.sql.gz
+      args:
+        creates: /usr/share/zabbix-sql-scripts/mysql/server.sql 
+
+
+    - name: Восстановление базы данных из дампа
+      shell: mysql -u root -p123456789 zabbix < /usr/share/zabbix-sql-scripts/mysql/server.sql
+      args:
+        executable: /bin/bash
+      register: restore_result
+      changed_when: restore_result.stdout != ""
+ 
+    - name: Проверка успешности восстановления базы данных
+      fail:
+        msg: "Не удалось восстановить базу данных из дампа"
+      when: restore_result.failed
+
+
+                       
+    - name: Включить и запустить Zabbix и Агент
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      with_items:
+        - zabbix-server
+        - zabbix-agent
+ 
+    - name: Проверка существования таблицы dbversion
+      shell: mysql -u root -p123456789 -e "USE zabbix; SELECT 1 FROM dbversion LIMIT 1;"
+      register: dbversion_check
+      ignore_errors: true
+ 
+   
+    - name: Создание таблицы dbversion, если она не существует
+      shell: mysql -u root -p123456789 -e "USE zabbix; CREATE TABLE dbversion (mandatory tinyint(1) unsigned NOT NULL DEFAULT '1', version varchar(255) NOT NULL DEFAULT '', date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, PRIMARY KEY (mandatory)) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
+      when: dbversion_check.rc != 0
+
+    - name: Вставка значений в таблицу dbversion
+      shell: mysql -u root -p123456789 -e "USE zabbix; INSERT INTO dbversion (mandatory, version, date) VALUES (0, '5.2.7', NOW());"
+      when: dbversion_check.rc != 0
+ 
+    - name: Настройка Zabbix-сервера
+      template:
+        src: zabbix_server.conf.j2
+        dest: /etc/zabbix/zabbix_server.conf
+        owner: root
+        group: root
+        mode: '0644'
+      notify: restart zabbix-server
+ 
+    - name: Настройка PHP-интерфейса Zabbix
+      template:
+        src: zabbix.conf.php.j2
+        dest: /etc/zabbix/web/zabbix.conf.php
+        owner: root
+        group: www-data
+        mode: '0640'
+      notify: restart zabbix-frontend
+ 
+    - name: Запуск и включение Zabbix сервер
+      systemd:
+        name: zabbix-server
+        state: started
+        enabled: yes
+ 
+    - name: Запуск и включение MySQL
+      systemd:
+        name: mysql
+        state: started
+        enabled: yes
+ 
+    - name: Проверка прав доступа к директории /run/zabbix
+      file:
+        path: /run/zabbix/
+        state: directory
+        owner: zabbix
+        group: zabbix
+        mode: '0755'
+ 
+  handlers:
+    - name: restart zabbix-server
+      systemd:
+        name: zabbix-server
+        state: restarted
+ 
+    - name: restart zabbix-frontend
+      systemd:
+        name: nginx.service
+        state: restarted   
