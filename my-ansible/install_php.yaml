@@ -75,3 +75,8 @@
       file: 
         path: /var/www/html/index.php
         mode: '0644'
+
+    - name: Restart php7.4-fpm
+      systemd:
+        name: php7.4-fpm
+        state: restarted
