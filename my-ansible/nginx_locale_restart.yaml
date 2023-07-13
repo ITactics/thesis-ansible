@@ -12,7 +12,7 @@
       command: dpkg-reconfigure --frontend noninteractive locales
       changed_when: false
       register: reconfigure_result
-      failed_when: reconfigure_result.rc != 0 and reconfigure_result.rc != 30  # 30 indicates already configured
+      failed_when: reconfigure_result.rc != 0 and reconfigure_result.rc != 30  # 30 указывает на то, что уже настроено
 
     - name: Перезапуск Nginx
       service:
