@@ -9,10 +9,10 @@
 
     - name: Переконфигурация локалей
       become: true
-      command: dpkg-reconfigure locales
-      args:
-        stdin: "en_US.UTF-8 UTF-8"
+      command: dpkg-reconfigure --frontend noninteractive locales
       changed_when: false
+      register: reconfigure_result
+      failed_when: reconfigure_result.rc != 0 and reconfigure_result.rc != 30  # 30 indicates already configured
 
     - name: Перезапуск Nginx
       service:
