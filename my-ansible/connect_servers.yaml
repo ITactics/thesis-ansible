@@ -1,0 +1,39 @@
+---
+- name: Configure SSH and OpenSSH Server
+  hosts: node2
+  gather_facts: false
+  become: true
+ 
+  tasks:
+    - name: Install OpenSSH Server
+      apt:
+        name: openssh-server
+        state: present
+ 
+    - name: Start OpenSSH Server
+      service:
+        name: ssh
+        state: started
+        enabled: true
+ 
+    - name: Copy SSH Config
+      template:
+        src: ssh_config.j2
+        dest: /etc/ssh/ssh_config
+        owner: root
+        group: root
+        mode: '0644'
+      notify:
+        - Restart SSH Service
+ 
+    - name: Create Empty Known Hosts File
+      file:
+        path: /etc/ssh/ssh_known_hosts
+        state: touch
+        mode: '0644'
+ 
+  handlers:
+    - name: Restart SSH Service
+      service:
+        name: ssh
+        state: restarted
