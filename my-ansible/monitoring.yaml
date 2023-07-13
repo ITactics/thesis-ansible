@@ -80,7 +80,6 @@
         msg: "Не удалось восстановить базу данных из дампа"
       when: restore_result.failed
 
-
                        
     - name: Включить и запустить Zabbix и Агент
       service:
