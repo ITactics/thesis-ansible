@@ -12,7 +12,7 @@
       expect:
         command: dpkg-reconfigure locales
         responses:
-          - 'en_US.UTF-8 UTF-8'
+          - en_US.UTF-8 UTF-8
       changed_when: false
 
     - name: Перезапуск Nginx
