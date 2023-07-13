@@ -9,10 +9,9 @@
 
     - name: Переконфигурация локалей
       become: true
-      expect:
-        command: dpkg-reconfigure locales
-        responses:
-          - en_US.UTF-8 UTF-8
+      command: dpkg-reconfigure locales
+      args:
+        stdin: "en_US.UTF-8 UTF-8"
       changed_when: false
 
     - name: Перезапуск Nginx
