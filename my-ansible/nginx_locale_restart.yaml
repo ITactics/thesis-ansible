@@ -1,0 +1,17 @@
+- name: Генерация локали и перезапуск Nginx
+  hosts: node1, node2
+  become: true
+
+  tasks:
+    - name: Генерация локали "en_US"
+      shell: locale-gen en_US
+      changed_when: false
+
+    - name: Переконфигурация локалей
+      shell: dpkg-reconfigure locales
+      changed_when: false
+
+    - name: Перезапуск Nginx
+      service:
+        name: nginx
+        state: restarted
