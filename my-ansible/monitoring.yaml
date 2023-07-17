@@ -1,6 +1,6 @@
 ---
 - name: Деплой системы мониторинга Zabbix
-  hosts: node1,node2
+  hosts: localhost
   become: true
  
   tasks:
