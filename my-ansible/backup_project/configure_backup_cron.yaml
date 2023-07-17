@@ -1,0 +1,32 @@
+---
+- name: Резервное копирование баз данных
+  hosts: node1,node2
+  become: true
+  tasks:
+    - name: Создание директории для резервных копий
+      file:
+        path: /var/backups/database
+        state: directory
+        mode: '0755'
+      become: true
+ 
+    - name: Копирование файла шаблона резервного копирования
+      template:
+        src: backup_script_template.sh
+        dest: /var/backups/database/backup_script.sh
+        mode: '0755'
+      become: true
+ 
+    - name: Загрузка сценария резервного копирования на серверы
+      copy:
+        src: backup_script_template.sh
+        dest: /var/backups/database/backup_script.sh
+      become: true
+ 
+    - name: Настройка Cron для резервного копирования
+      cron:
+        name: Резервное копирование баз данных
+        minute: '30'
+        hour: '3'
+        job: /var/backups/database/backup_script.sh
+      become: true

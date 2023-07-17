@@ -1,0 +1,16 @@
+---
+- name: Проверка наличия файлов .sql
+  hosts: node1,node2
+  become: true
+  tasks:
+    - name: Поиск файлов .sql
+      find:
+        paths: /var/backups/database
+        patterns: "*.sql"
+      register: result
+      become: true
+ 
+    - name: Вывод найденных файлов .sql
+      debug:
+        var: result.files
+ 
