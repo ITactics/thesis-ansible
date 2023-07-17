@@ -1,5 +1,5 @@
 - name: Генерация локали и перезапуск Nginx
-  hosts: node1, node2
+  hosts: localhost
   become: true
 
   tasks:
