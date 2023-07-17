@@ -1,6 +1,6 @@
 ---
 - name: Развертывание базы данных MySQL с репликацией
-  hosts: node1,node2
+  hosts: localhost
   remote_user: root
   become: yes
   tasks:
