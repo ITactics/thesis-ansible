@@ -4,9 +4,9 @@ global $DB;
  
 $DB['TYPE'] = 'MYSQL';
 $DB['SERVER'] = 'localhost';
-$DB['PORT'] = '3306';
+$DB['PORT'] = "{{ port }}";
 $DB['DATABASE'] = 'zabbix';
 $DB['USER'] = 'zabbix';
-$DB['PASSWORD'] = '123456789';
+$DB['PASSWORD'] = "{{ mysql_zabbix_pass }}";
  
 // ...
