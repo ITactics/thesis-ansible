@@ -1,6 +1,6 @@
 ---
 - name: Проверка наличия файлов .sql
-  hosts: node1,node2
+  hosts: localhost
   become: true
   tasks:
     - name: Поиск файлов .sql
