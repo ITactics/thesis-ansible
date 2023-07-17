@@ -1,0 +1,10 @@
+---
+- name: Установка необходимых пакетов Python
+  hosts: node1,node2
+  become: true
+  tasks:
+    - name: Установка пакетов Python
+      apt:
+        name: python
+        state: present
+      become: true
