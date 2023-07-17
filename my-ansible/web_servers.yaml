@@ -1,6 +1,6 @@
 ---
 - name: Установка и настройка веб-серверов
-  hosts: web_servers
+  hosts: localhost
   become: true
  
   tasks:
