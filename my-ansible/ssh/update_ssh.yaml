@@ -1,5 +1,5 @@
 - name: Update SSH configuration
-  hosts: node1, node2
+  hosts: localhost
  
   tasks:
     - name: Uncomment PermitRootLogin in sshd_config
