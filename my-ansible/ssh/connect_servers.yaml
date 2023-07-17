@@ -1,6 +1,6 @@
 ---
 - name: Configure SSH and OpenSSH Server
-  hosts: node1,node2
+  hosts: localhost
   gather_facts: false
   become: true
  
