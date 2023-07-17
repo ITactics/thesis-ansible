@@ -4,7 +4,7 @@
 backup_dir="/var/backups/database"
 database_names=("namedatabses1" "namedatabses2")
 username="root"
-password="{{ mysql_root_pass }}"
+password= "{{ mysql_root_pass }}"
  
 # Создание директории для резервной копии
 mkdir -p $backup_dir
