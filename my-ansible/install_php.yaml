@@ -1,6 +1,6 @@
 ---
 - name: Установка пакетов PHP для Zabbix
-  hosts: node1, node2
+  hosts: localhost
   become: true
  
   tasks:
