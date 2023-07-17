@@ -1,6 +1,6 @@
 ---
 - name: Резервное копирование баз данных
-  hosts: node1,node2
+  hosts: localhost
   become: true
   tasks:
     - name: Создание директории для резервных копий
