@@ -2,7 +2,7 @@
  
 # Настройки резервного копирования
 backup_dir="/var/backups/database"
-database_names=("namedatabses1" "namedatabses2")
+database_names=("name_database1" "name_database2")
 username="root"
 password= "{{ mysql_root_pass }}"
  
