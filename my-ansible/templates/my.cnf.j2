@@ -1,7 +1,7 @@
 {{ ansible_managed | comment }}
  
 [client]
-password = 123456789
+password = "{{ mysql_root_pass }}"
 port = {{ mysql_port }}
 socket = {{ mysql_socket }}
  
