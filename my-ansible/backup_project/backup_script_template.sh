@@ -2,7 +2,7 @@
  
 # Настройки резервного копирования
 backup_dir="/var/backups/database"
-database_names=("mydb" "max")
+database_names=("namedatabses1" "namedatabses2")
 username="root"
 password="12345789"
  
