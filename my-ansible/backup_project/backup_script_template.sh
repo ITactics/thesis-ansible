@@ -13,7 +13,7 @@ mkdir -p $backup_dir
 for database_name in "${database_names[@]}"
 do
     # Формирование имени файла резервной копии с использованием имени базы данных и текущей даты и времени
-    backup_filename="$backup_dir/$database_name_$(date +%Y-%m-%d_%H-%M-%S).sql"
+    backup_filename="$backup_dir/${database_name}_$(date +%Y-%m-%d_%H-%M-%S).sql"
     
     # Выполнение резервного копирования базы данных
     mysqldump -u $username -p$password $database_name > $backup_filename
