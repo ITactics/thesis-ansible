@@ -2,9 +2,9 @@
 
 # Настройки резервного копирования
 backup_dir="/var/backups/database"
-database_names=("name_database1" "name_database2")
+database_names=("mydb" "max")
 username="root"
-password= "{{ mysql_root_pass }}"
+password="12345789"
 
 # Создание директории для резервной копии
 mkdir -p $backup_dir
@@ -12,7 +12,7 @@ mkdir -p $backup_dir
 # Итерация по именам баз данных
 for database_name in "${database_names[@]}"
 do
-    # Имя файла резервной копии будет содержать текущую дату и время
+    # Формирование имени файла резервной копии с использованием имени базы данных и текущей даты и времени
     backup_filename="$backup_dir/$database_name_$(date +%Y-%m-%d_%H-%M-%S).sql"
     
     # Выполнение резервного копирования базы данных
