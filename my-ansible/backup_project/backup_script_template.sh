@@ -22,4 +22,6 @@ do
         echo "Ошибка при резервном копировании базы данных $database_name."
     fi
 done
- 
+
+# Удаление резервных копий старше 30 дней
+find $backup_dir -type f -name "*.sql" -mtime +30 -exec rm -f {} \;
