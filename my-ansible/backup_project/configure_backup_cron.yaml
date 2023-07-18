@@ -10,15 +10,17 @@
         mode: '0755'
       become: true
  
-    - name: Копирование файла скрипта резервного копирования
-      copy:
+    - name: Копирование файла шаблона резервного копирования
+      template:
         src: backup_script_template.sh
         dest: /var/backups/database/backup_script.sh
         mode: '0755'
       become: true
  
-    - name: Запуск скрипта резервного копирования
-      command: /var/backups/database/backup_script.sh
+    - name: Загрузка сценария резервного копирования на серверы
+      copy:
+        src: backup_script_template.sh
+        dest: /var/backups/database/backup_script.sh
       become: true
  
     - name: Настройка Cron для резервного копирования
