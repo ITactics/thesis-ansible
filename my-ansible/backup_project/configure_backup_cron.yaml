@@ -1,6 +1,6 @@
 ---
 - name: Резервное копирование баз данных
-  hosts: database_servers
+  hosts: localhost
   become: true
   tasks:
     - name: Создание директории для резервных копий
@@ -9,30 +9,22 @@
         state: directory
         mode: '0755'
       become: true
-
-    - name: Установка необходимых пакетов Python
-      apt:
-        name: python
-        state: present
-      become: true
-
-    - name: Копирование файла шаблона резервного копирования
-      template:
-        src: backup_script_template.sh
+ 
+    - name: Копирование файла скрипта резервного копирования
+      copy:
+        src: backup_script.sh
         dest: /var/backups/database/backup_script.sh
         mode: '0755'
       become: true
-
-    - name: Загрузка сценария резервного копирования на серверы
-      copy:
-        src: /var/backups/database/backup_script.sh
-        dest: /destination/path/backup_script.sh
+ 
+    - name: Запуск скрипта резервного копирования
+      command: /var/backups/database/backup_script.sh
       become: true
-
+ 
     - name: Настройка Cron для резервного копирования
       cron:
         name: Резервное копирование баз данных
-        minute: '0'
-        hour: '0'
+        minute: '30'
+        hour: '3'
         job: /var/backups/database/backup_script.sh
       become: true
