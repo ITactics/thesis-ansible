@@ -12,15 +12,18 @@ mkdir -p $backup_dir
 # Итерация по именам баз данных
 for database_name in "${database_names[@]}"
 do
+    # Имя файла резервной копии будет содержать текущую дату и время
+    backup_filename="$backup_dir/$database_name_$(date +%Y-%m-%d_%H-%M-%S).sql"
+    
     # Выполнение резервного копирования базы данных
-    mysqldump -u $username -p$password $database_name > $backup_dir/$database_name.sql
+    mysqldump -u $username -p$password $database_name > $backup_filename
     
     # Проверка кода завершения mysqldump
     if [ $? -eq 0 ]; then
-        echo "Резервное копирование базы данных $database_name завершено."
+        echo "Резервное копирование базы данных $database_name завершено. Файл: $backup_filename"
         
         # Копирование резервной копии в Google Cloud Storage
-        gsutil cp $backup_dir/$database_name.sql gs://my-bucket-name/
+        gsutil cp $backup_filename gs://my-bucket-name/
     else
         echo "Ошибка при резервном копировании базы данных $database_name."
     fi
