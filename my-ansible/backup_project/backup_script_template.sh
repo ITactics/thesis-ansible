@@ -2,9 +2,9 @@
 
 # Настройки резервного копирования
 backup_dir="/var/backups/database"
-database_names=("mydb" "max")
+database_names=("name_database1" "name_database2")
 username="root"
-password="12345789"
+password= "{{ mysql_root_pass }}"
 
 # Создание директории для резервной копии
 mkdir -p $backup_dir
