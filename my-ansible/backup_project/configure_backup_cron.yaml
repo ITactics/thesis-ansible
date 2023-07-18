@@ -2,6 +2,12 @@
 - name: Резервное копирование баз данных
   hosts: localhost
   become: true
+  vars:
+    database_names:
+      - mydb
+      - max
+    username: root
+    password: 12345789
   tasks:
     - name: Создание директории для резервных копий
       file:
@@ -9,22 +15,23 @@
         state: directory
         mode: '0755'
       become: true
- 
-    - name: Копирование файла скрипта резервного копирования
+
+    - name: Копирование скрипта резервного копирования
       copy:
         src: backup_script.sh
         dest: /var/backups/database/backup_script.sh
         mode: '0755'
       become: true
- 
-    - name: Запуск скрипта резервного копирования
-      command: /var/backups/database/backup_script.sh
+
+    - name: Резервное копирование баз данных
+      command: /var/backups/database/backup_script.sh "{{ item }}"
+      with_items: "{{ database_names }}"
       become: true
- 
+
     - name: Настройка Cron для резервного копирования
       cron:
         name: Резервное копирование баз данных
         minute: '30'
         hour: '3'
-        job: /var/backups/database/backup_script.sh
+        job: /var/backups/database/backup_script.sh "mydb"
       become: true
