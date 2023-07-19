@@ -37,7 +37,7 @@
     - name: Создание файла задачи Cron
       cron:
         name: "Обновление серверов каждый 1-й день месяца в 3:30"
-        job: job: /usr/bin/ansible-playbook /home/max/my-ansible/update_servers.yaml
+        job: /usr/bin/ansible-playbook /home/max/my-ansible/update_servers.yaml
         minute: "30"
         hour: "3"
         day: "1"
