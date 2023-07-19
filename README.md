@@ -14,6 +14,8 @@ sudo apt-add-repository --yes --update ppa:ansible/ansible
 sudo apt install ansible
 
 
+Создайте файл Ansible Vault. Необходимые пары ключ-значение хранятся в файле secrets.yaml. Используйте безопасный пароль для шифрования, так как этот файл будет содержать конфиденциальные данные.
+
 Требования:
 - Apache
 - Nginx
