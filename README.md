@@ -26,9 +26,15 @@ ansible-vault edit secrets.yaml
 Расшифровка файла secrets.yaml:
 ansible-vault decrypt secrets.yaml
 
-Запуск плейбука с использованием зашифрованного файла secrets.yaml
-ansible-playbook your_playbook.yaml --ask-vault-pass
+Варианты запуска плейбука с использованием зашифрованного файла secrets.yaml:
 
+1. Запуск с использованием параметра --ask-vault-pass
+   ansible-playbook your_playbook.yaml --ask-vault-pass
+В этом случае Ansible запросит пароль для расшифровки файла secrets.yaml и использует его для расшифровки данных.
+
+2. Запуск с использованием переменной окружения -e @secrets.yaml
+   ansible-playbook your_playbook.yaml -e @secrets.yaml
+В этом случае зашифрованные данные из файла secrets.yaml будут загружены и использованы без запроса пароля, если файл был зашифрован с помощью команды ansible-vault encrypt.
 
 Требования:
 - Apache
