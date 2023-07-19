@@ -1,0 +1,51 @@
+---
+- name: Исправление веб-серверов
+  hosts: all
+  become: yes
+ 
+  tasks:
+    - name: Обновление пакетов Apache2
+      apt:
+        name: apache2
+        state: latest
+ 
+    - name: Обновление пакетов Nginx
+      apt:
+        name: nginx
+        state: latest
+ 
+    - name: Обновление пакетов HAProxy
+      apt:
+        name: haproxy
+        state: latest
+ 
+- name: Исправление экземпляров базы данных
+  hosts: all
+  become: yes
+ 
+  tasks:
+    - name: Обновление пакетов MySQL
+      apt:
+        name: mysql-server
+        state: latest
+ 
+- name: Настройка задачи Cron для update_servers
+  hosts: web_servers
+  become: yes
+ 
+  tasks:
+    - name: Создание файла задачи Cron
+      cron:
+        name: "Обновление серверов каждый 1-й день месяца в 3:30"
+        job: job: /usr/bin/ansible-playbook /home/max/my-ansible/update_servers.yaml
+        minute: "30"
+        hour: "3"
+        day: "1"
+        month: "*"
+        weekday: "*"
+        user: "max"  # Имя пользователя Ansible
+      register: cron_result
+ 
+    - name: Вывод информации о создании задачи Cron
+      debug:
+        msg: "Задача Cron успешно создана: {{ cron_result }}"
