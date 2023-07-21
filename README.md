@@ -45,4 +45,5 @@ ansible-vault decrypt secrets.yaml
 - Nginx
 - HAProxy
 - MySQL >= 8.0.33
+- PHP >= 7.4
 - Zabbix >= 6.4.4
