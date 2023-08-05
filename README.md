@@ -16,7 +16,7 @@ sudo apt install ansible
 
 Создайте файл Ansible Vault. Необходимые пары ключ-значение хранятся в файле secrets.yaml. Используйте безопасный пароль для шифрования, так как этот файл будет содержать конфиденциальные данные. Создайте так же файл vault_password.txt, где будет храниться пароль доступа к файлу secrets.yaml. Найдите и расскоментируйте строчку в ansible.cfg #vault_password_file = 
 Добавьте значение
-#vault_password_file = /путь/к файлу/vault_password.txt
+vault_password_file = /путь/к файлу/vault_password.txt
 
 Вот несколько примеров команд:
 Создание нового файла secrets.yaml:
