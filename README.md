@@ -10,7 +10,7 @@
 
 Для установки необходимых пакетов, выполните следующую команду:
 <pre>
-``` bash
+```bash
   sudo apt install software-properties-common
   ```
 </pre>
