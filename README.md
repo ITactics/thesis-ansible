@@ -10,21 +10,21 @@
 
 Для установки необходимых пакетов, выполните следующую команду:
 <pre>
-```bash
+``` bash
   sudo apt install software-properties-common
   ```
 </pre>
 
 Добавьте репозиторий Ansible с помощью следующей команды:
 <pre>
-```bash
+``` bash
 sudo apt-add-repository --yes --update ppa:ansible/ansible
   ```
 </pre>
 
 Установите пакет Ansible:
 <pre>
-```bash
+``` bash
 sudo apt install ansible
   ```
 </pre>
@@ -34,7 +34,7 @@ Ansible Vault
 
 Раскомментируйте и установите значение в ansible.cfg:
 <pre>
-```bash
+``` bash
 vault_password_file = /путь/к файлу/vault_password.txt
   ```
 </pre>
@@ -43,21 +43,21 @@ vault_password_file = /путь/к файлу/vault_password.txt
 
 Создание нового файла secrets.yaml:
 <pre>
-```bash
+``` bash
 ansible-vault create secrets.yaml
   ```
 </pre>
 
 Редактирование существующего файла secrets.yaml:
 <pre>
-```bash
+``` bash
 ansible-vault edit secrets.yaml
   ```
 </pre>
 
 Расшифровка файла secrets.yaml:
 <pre>
-```bash
+``` bash
 ansible-vault decrypt secrets.yaml
   ```
 </pre>
@@ -66,7 +66,7 @@ ansible-vault decrypt secrets.yaml
 
 Запуск с использованием параметра `--ask-vault-pass`
 <pre>
-```bash
+``` bash
 ansible-playbook your_playbook.yaml --ask-vault-pass
   ```
 </pre>
@@ -75,7 +75,7 @@ ansible-playbook your_playbook.yaml --ask-vault-pass
 
 Запуск с использованием переменной окружения `-e @secrets.yaml`
 <pre>
-```bash
+``` bash
 ansible-playbook your_playbook.yaml -e @secrets.yaml
   ```
 </pre>
