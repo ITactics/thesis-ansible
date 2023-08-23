@@ -9,11 +9,10 @@
 Установка Ansible производится на Ubuntu 20.04.6 с версией Ansible >= 2.12.10.
 
 Для установки необходимых пакетов, выполните следующую команду:
-<pre>
-```bash
+
+``` bash
   sudo apt install software-properties-common
   ```
-</pre>
 
 Добавьте репозиторий Ansible с помощью следующей команды:
 <pre>
