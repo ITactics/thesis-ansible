@@ -87,3 +87,8 @@ ansible-playbook your_playbook.yaml -e @secrets.yaml
   * MySQL >= 8.0.33
   * PHP >= 7.4
   * Zabbix >= 6.4.4
+ 
+## Лицензия
+
+Этот проект лицензирован в соответствии с [лицензией GPL-3.0](LICENSE).
+
